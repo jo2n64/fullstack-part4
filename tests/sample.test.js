@@ -51,7 +51,22 @@ test('blogs not made due to missing properties', async () => {
 		likes: 2198
 	}
 	await api.post('/api/blogs').send(newBlog).expect(400)
-})
+}, 100000)
+
+test('deleted last entry', async () => {
+	const blogs = await helper.blogsInDb()
+	const lastBlog = blogs[blogs.length - 1]
+	await api.delete(`/api/blogs/${lastBlog.id}`).expect(204)
+	const newBlogs = await helper.blogsInDb()
+	expect(newBlogs).toHaveLength(blogs.length - 1)
+}, 100000)
+
+test('updated first entry', async () => {
+	const blogs = await helper.blogsInDb()
+	const firstBlog = blogs[0]
+	firstBlog.likes = 2890321
+	await api.put(`/api/blogs/${firstBlog.id}`).expect(200).expect('Content-Type', /application\/json/)
+}, 100000)
 
 afterAll(() => {
 	mongoose.connection.close()
