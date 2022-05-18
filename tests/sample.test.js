@@ -45,6 +45,14 @@ test('blog likes default to 0 if missing', async () => {
 	expect(newBlog.likes).toBeDefined()
 }, 100000)
 
+test('blogs not made due to missing properties', async () => {
+	const newBlog = {
+		author: 'hiya',
+		likes: 2198
+	}
+	await api.post('/api/blogs').send(newBlog).expect(400)
+})
+
 afterAll(() => {
 	mongoose.connection.close()
 })
