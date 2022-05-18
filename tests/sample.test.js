@@ -7,7 +7,7 @@ const api = supertest(app)
 
 test('registered blogs', async () => {
 	const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/)
-	expect(response.body).toHaveLength(2)
+	expect(response.body).toHaveLength(6)
 }, 100000)
 
 test('property "id" exists', async () => {
@@ -29,7 +29,21 @@ test('blog added successfully', async () => {
 	const updatedBlogs = await helper.blogsInDb()
 	expect(updatedBlogs).toHaveLength(blogsBeforeUpdate.length + 1)
 
-})
+}, 100000)
+
+test('blog likes default to 0 if missing', async () => {
+	const newBlog = {
+		title: 'sup',
+		author: 'hiya',
+		url: 'comos.com'
+	}
+	if (!newBlog.hasOwnProperty("likes")) {
+		newBlog.likes = 0
+	}
+	console.log(newBlog)
+	await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+	expect(newBlog.likes).toBeDefined()
+}, 100000)
 
 afterAll(() => {
 	mongoose.connection.close()
