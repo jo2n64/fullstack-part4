@@ -70,22 +70,22 @@ test('updated first entry', async () => {
 	await api.put(`/api/blogs/${firstBlog.id}`).expect(200).expect('Content-Type', /application\/json/)
 }, 100000)
 
-test('added user successfully', async () => {
-	const usersAtStart = await helper.usersInDb()
+// test('added user successfully', async () => {
+// 	const usersAtStart = await helper.usersInDb()
 
-	const newUser = {
-		username: 'ohaiMark',
-		name: 'Mark Marks',
-		password: 'putputput'
-	}
+// 	const newUser = {
+// 		username: 'ohaiMark',
+// 		name: 'Mark Marks',
+// 		password: 'putputput'
+// 	}
 
-	await api.post('/api/users').send(newUser).expect(201).expect('Content-Type', /application\/json/)
-	const usersAtEnd = await helper.usersInDb()
-	expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+// 	await api.post('/api/users').send(newUser).expect(201).expect('Content-Type', /application\/json/)
+// 	const usersAtEnd = await helper.usersInDb()
+// 	expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
 
-	const usernames = usersAtEnd.map(user => user.username)
-	expect(usernames).toContain(newUser.username)
-})
+// 	const usernames = usersAtEnd.map(user => user.username)
+// 	expect(usernames).toContain(newUser.username)
+// })
 
 afterAll(() => {
 	mongoose.connection.close()

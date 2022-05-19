@@ -5,6 +5,15 @@ const User = require('../models/user')
 usersRouter.post('/', async (request, response) => {
 	const { username, password, name } = request.body
 
+	if (username === undefined || password === undefined || name === undefined) {
+		return response.status(400).json({ error: 'missing user properties!' })
+	}
+
+	const userExisting = await User.findOne({ username })
+	if (userExisting) {
+		return response.status(400).json({ error: 'username must be unique!' })
+	}
+
 	const saltRounds = 10
 	const passwordHash = await bcryptjs.hash(password, saltRounds)
 
