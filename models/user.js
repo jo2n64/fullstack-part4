@@ -12,7 +12,13 @@ const userSchema = new mongoose.Schema({
 		minLength: 3,
 		required: true
 	},
-	name: String
+	name: String,
+	blogs: [
+		{
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'Blog'
+		}
+	],
 })
 
 userSchema.set('toJSON', {
